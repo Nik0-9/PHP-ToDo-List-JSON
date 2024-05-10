@@ -6,15 +6,14 @@ createApp({
             carbonara: [],
             newAction: '',
             apiUrl: 'server.php',
-            lastId: null
+
         }
     },
     methods: {
         getData() {
             axios.get(this.apiUrl).then((res) => {
-                console.log(res.data);
                 this.carbonara = res.data;
-                
+
             });
         },
         addAction() {
@@ -23,41 +22,41 @@ createApp({
                 text: this.newAction,
                 done: false
             }
-            let newId = 0;
-
-            newObj.id = this.carbonara.length +1;
+            newObj.id = this.carbonara.length + 1;
             const data = new FormData();
             data.append('id', newObj.id);
             data.append('text', newObj.text);
             data.append('done', newObj.done);
+            
             axios.post(this.apiUrl, data).then((res) => {
                 this.carbonara = res.data;
-                
+
             });
 
             this.newAction = '';
-            console.log(this.carbonara);
         },
 
-        toggleLineThrough(id) {
-            const item = this.carbonara.find((el) => el.id === id);
-            console.log(item);
-            if (item) {
-                item.done = !item.done
+        toggleLineThrough(index) {
+            this.carbonara[index].done = !this.carbonara[index].done;
+            if (this.carbonara[index]) {
+                const data = this.carbonara[index];
+                data.inde = index;
+                axios.put(this.apiUrl, data).then((res) => {
+                    this.carbonara = res.data;
+                });
             }
         },
-
-        removeById(id) {
-            const index = this.carbonara.findIndex((el) => el.id === id);
-            if (index !== -1) {
-                this.carbonara.splice(index, 1);
+        removeById(index) {
+            const data = {
+                id: index
             }
+            axios.delete(this.apiUrl, { data }).then((res) => {
+                this.carbonara = res.data;
+            });
         },
-
     },
 
     created() {
         this.getData();
-        console.log(this.carbonara);
     }
 }).mount('#app')

@@ -71,7 +71,12 @@
     },
     {
         "id": 15,
-        "text": "Sparecchia la tavola",
+        "text": "Laviamo i piatti",
+        "done": false
+    },
+    {
+        "id": 16,
+        "text": "fumare siga",
         "done": false
     }
 ]
